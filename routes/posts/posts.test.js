@@ -2,6 +2,20 @@ const request = require("supertest");
 const should = require("should");
 const app = require("../../app");
 
+describe("GET /posts", () => {
+  describe("성공시", () => {
+    it("post객체가 담긴 배열리스트를 반환한다", done => {
+      request(app)
+        .get("/posts")
+        .expect(200)
+        .end((err, res) => {
+          res.body.should.be.an.instanceOf(Array);
+          done();
+        });
+    });
+  });
+});
+
 describe("GET /posts/1", () => {
   describe("성공시", () => {
     it("id값이 1인 객체를 반환한다", done => {
