@@ -8,7 +8,6 @@ describe("/", () => {
       request(app)
         .get("/")
         .end((err, res) => {
-          console.log(res.body);
           res.body.should.have.value("test", 1);
         });
     });
