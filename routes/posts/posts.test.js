@@ -93,4 +93,17 @@ describe("POST /posts", () => {
       body.should.have.property("title", title);
     });
   });
+
+  describe("실패시", () => {
+    it("필수 파라미터가 누락시", done => {
+      request(app)
+        .post("/posts")
+        .send({
+          title: "",
+          contents: ""
+        })
+        .expect(400)
+        .end(done);
+    });
+  });
 });

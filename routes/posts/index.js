@@ -49,6 +49,16 @@ router.delete("/:id", (req, res, next) => {
 });
 
 router.post("/", (req, res, next) => {
+  const requireProperties = ["title", "contents"];
+  let isAll = false;
+  requireProperties.forEach(property => {
+    if (!req.body[property]) {
+      isAll = true;
+    }
+  });
+
+  if (isAll) res.status(400).end();
+
   const post = {
     id: posts.length + 1,
     title: req.body.title,
