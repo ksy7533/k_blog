@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const posts = [
+let posts = [
   {
     title: "제목1",
     contents:
@@ -39,6 +39,23 @@ router.get("/:id", (req, res, next) => {
 
   if (!post) res.status(404).end();
   res.json(post);
+});
+
+router.delete("/:id", (req, res, next) => {
+  const paramsId = parseInt(req.params.id, 10);
+  if (Number.isNaN(paramsId)) res.status(400).end();
+  posts = posts.filter(id => paramsId !== id);
+  res.status(204).end();
+});
+
+router.post("/", (req, res, next) => {
+  const post = {
+    id: posts.length + 1,
+    title: req.body.title,
+    contents: req.body.contents
+  };
+  posts.push(post);
+  res.status(201).json(post);
 });
 
 module.exports = router;

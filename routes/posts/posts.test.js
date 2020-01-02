@@ -45,3 +45,52 @@ describe("GET /posts/1", () => {
     });
   });
 });
+
+describe("DELTE /posts/1", () => {
+  describe("성공시", () => {
+    it("id값이 1인 객체를 삭제한다", done => {
+      request(app)
+        .delete("/posts/1")
+        .expect(204)
+        .end(done);
+    });
+  });
+
+  describe("실패시", () => {
+    it("해당 id값이 숫자가 아닌경우", done => {
+      request(app)
+        .delete("/posts/none")
+        .expect(400)
+        .end(done);
+    });
+  });
+});
+
+describe("POST /posts", () => {
+  describe("성공시", () => {
+    let body;
+    let title = "4제목";
+
+    beforeEach(done => {
+      request(app)
+        .post("/posts")
+        .send({
+          title,
+          contents: "새로생성된 본문입니다"
+        })
+        .expect(201)
+        .end((err, res) => {
+          body = res.body;
+          done();
+        });
+    });
+
+    it("생성된 post 객체를 반환한다", () => {
+      body.should.have.property("id");
+    });
+
+    it("생성된 객체는 title을 갖는다", () => {
+      body.should.have.property("title", title);
+    });
+  });
+});
