@@ -107,3 +107,63 @@ describe("POST /posts", () => {
     });
   });
 });
+
+describe("PUT /posts/:id", () => {
+  describe("성공시", () => {
+    it("변경된 property 값으로 수정된 객체 반환", done => {
+      let title = "변경된 제목";
+      let contents = "변경된 콘텐츠";
+
+      request(app)
+        .put("/posts/2")
+        .send({
+          title,
+          contents
+        })
+        .expect(201)
+        .end((err, res) => {
+          res.body.should.have.property("title", title);
+          res.body.should.have.property("contents", contents);
+          done();
+        });
+    });
+  });
+});
+
+describe("실패시", () => {
+  let title = "변경된 제목";
+  let contents = "변경된 콘텐츠";
+
+  it("id값이 숫자가 아닌 경우", done => {
+    request(app)
+      .put("/posts/none")
+      .send({
+        title,
+        contents
+      })
+      .expect(400)
+      .end(done);
+  });
+
+  it("필수 파라미터가 누락시", done => {
+    request(app)
+      .put("/posts/2")
+      .send({
+        title: "",
+        contents: ""
+      })
+      .expect(400)
+      .end(done);
+  });
+
+  it("id로 post를 찾을수 없는경우 404으로 응답한다", done => {
+    request(app)
+      .put("/posts/100")
+      .send({
+        title,
+        contents
+      })
+      .expect(404)
+      .end(done);
+  });
+});
