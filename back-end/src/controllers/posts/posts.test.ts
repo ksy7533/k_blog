@@ -1,6 +1,8 @@
-const request = require("supertest");
-const should = require("should");
-const app = require("../../app");
+import request from "supertest";
+import { expect } from "chai";
+import server from "../../server";
+
+const app = server.app;
 
 describe("GET /posts", () => {
   describe("성공시", () => {
@@ -9,7 +11,7 @@ describe("GET /posts", () => {
         .get("/posts")
         .expect(200)
         .end((err, res) => {
-          res.body.should.be.an.instanceOf(Array);
+          expect(res.body).be.an.instanceof(Array);
           done();
         });
     });
@@ -23,7 +25,7 @@ describe("GET /posts/1", () => {
         .get("/posts/1")
         .expect(200)
         .end((err, res) => {
-          res.body.should.have.property("id", 1);
+          expect(res.body).have.property("id", 1);
           done();
         });
     });
@@ -68,7 +70,7 @@ describe("DELTE /posts/1", () => {
 
 describe("POST /posts", () => {
   describe("성공시", () => {
-    let body;
+    let body: any;
     let title = "4제목";
 
     beforeEach(done => {
@@ -86,11 +88,11 @@ describe("POST /posts", () => {
     });
 
     it("생성된 post 객체를 반환한다", () => {
-      body.should.have.property("id");
+      expect(body).have.property("id");
     });
 
     it("생성된 객체는 title을 갖는다", () => {
-      body.should.have.property("title", title);
+      expect(body).have.property("title", title);
     });
   });
 
@@ -122,8 +124,8 @@ describe("PUT /posts/:id", () => {
         })
         .expect(201)
         .end((err, res) => {
-          res.body.should.have.property("title", title);
-          res.body.should.have.property("contents", contents);
+          expect(res.body).have.property("title", title);
+          expect(res.body).have.property("contents", contents);
           done();
         });
     });
